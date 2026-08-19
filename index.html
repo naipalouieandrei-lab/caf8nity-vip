@@ -93,82 +93,62 @@
     </div>
   </div>
 
-  <script>
-    const SUPABASE_URL = "https://cjbpswnb0igfjghpby.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7f5kP-so9DE-C40tA_pk7_c0mV";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://cjbpswnb0igfjghpby.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7fSkP-so9DE-C40tA_pk7_c0mV";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function toggleProof() {
-      const method = document.getElementById('payment_method').value;
-      document.getElementById('proofField').style.display = method === 'gcash' ? 'block' : 'none';
+  function toggleProof() {
+    const method = document.getElementById('payment_method').value;
+    document.getElementById('proofField').style.display = method === 'gcash' ? 'block' : 'none';
+  }
+
+  document.getElementById('vipForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const status = document.getElementById('status');
+    status.style.display = 'none';
+
+    const paymentMethod = document.getElementById('payment_method').value;
+    const formData = {
+      firstname: document.getElementById('firstname').value,
+      middlename: document.getElementById('middlename').value,
+      lastname: document.getElementById('lastname').value,
+      contact: document.getElementById('contact').value,
+      birthday: document.getElementById('birthday').value,
+      email: document.getElementById('email').value,
+      address: document.getElementById('address').value,
+      payment_method: paymentMethod
+    };
+
+    if (paymentMethod === 'gcash' && !document.getElementById('proof_file').files.length) {
+      status.textContent = '⚠️ Please upload proof of payment for GCash!';
+      status.className = 'error';
+      status.style.display = 'block';
+      return;
     }
 
-    document.getElementById('vipForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const status = document.getElementById('status');
-      status.style.display = 'none';
+    try {
+      const { data, error } = await supabase
+        .from('vip_members')
+        .insert([formData]);
 
-      const paymentMethod = document.getElementById('payment_method').value;
-      let proofUrl = null;
+      if (error) throw error;
 
-      if (paymentMethod === 'gcash' && !document.getElementById('proof_file').files.length) {
-        status.textContent = '⚠️ Please upload proof of payment for GCash!';
-        status.className = 'error';
-        return;
-      }
-
-      status.textContent = '⏳ Registering...';
-      status.className = '';
+      status.textContent = '✅ Registered Successfully! Welcome to CAF8NITY VIP! 🎉';
+      status.className = 'success';
       status.style.display = 'block';
+      document.getElementById('vipForm').reset();
+      document.getElementById('proofField').style.display = 'none';
 
-      try {
-        if (paymentMethod === 'gcash') {
-          const file = document.getElementById('proof_file').files[0];
-          const fileName = proof_${Date.now()}_${file.name};
-          const { data: uploadData, error: uploadError } = await supabase
-            .storage
-            .from('payment-proofs')
-            .upload(fileName, file);
-
-          if (uploadError) throw uploadError;
-          
-          const { data: { publicUrl } } = supabase
-            .storage
-            .from('payment-proofs')
-            .getPublicUrl(fileName);
-          
-          proofUrl = publicUrl;
-        }
-
-        const { data, error } = await supabase
-          .from('vip_members')
-          .insert({
-            firstname: document.getElementById('firstname').value,
-            middlename: document.getElementById('middlename').value,
-            lastname: document.getElementById('lastname').value,
-            contact: document.getElementById('contact').value,
-            birthday: document.getElementById('birthday').value,
-            email: document.getElementById('email').value,
-            address: document.getElementById('address').value,
-            payment_method: paymentMethod,
-            proof_url: proofUrl
-          })
-          .select();
-
-        if (error) throw error;
-
-        status.textContent = '✅ Registered Successfully! Welcome to CAF8NITY VIP! 🎉';
-        status.className = 'success';
-        document.getElementById('vipForm').reset();
-        document.getElementById('proofField').style.display = 'none';
-
-      } catch (err) {
-        console.error(err);
-        status.textContent = '❌ Error: ' + err.message;
-        status.className = 'error';
-      }
-    });
-  </script>
+    } catch (err) {
+      console.error(err);
+      status.textContent = '❌ Error: ' + err.message;
+      status.className = 'error';
+      status.style.display = 'block';
+    }
+  });
+</script>
 </body>
 </html>
 <!-- Update: Fixed syntax error -->
