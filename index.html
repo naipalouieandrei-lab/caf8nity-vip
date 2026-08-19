@@ -95,58 +95,72 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://cjbpswnrb0igfjghpby.supabase.co" ;
+  const SUPABASE_URL = "https://cjbpswnrb0igfjghpby.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7fSkP-so9DE-C40tA_pk7_c0mV";
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   function toggleProof() {
     const method = document.getElementById('payment_method').value;
-    document.getElementById('proofField').style.display = method === 'gcash' ? 'block' : 'none';
+    const field = document.getElementById('proofField');
+    if (field) field.style.display = method === 'gcash' ? 'block' : 'none';
   }
 
-  document.getElementById('vipForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const status = document.getElementById('status');
-    status.style.display = 'none';
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('vipForm');
+    if (!form) return;
 
-    const paymentMethod = document.getElementById('payment_method').value;
-    const formData = {
-      firstname: document.getElementById('firstname').value,
-      middlename: document.getElementById('middlename').value,
-      lastname: document.getElementById('lastname').value,
-      contact: document.getElementById('contact').value,
-      birthday: document.getElementById('birthday').value,
-      email: document.getElementById('email').value,
-      address: document.getElementById('address').value,
-      payment_method: paymentMethod
-    };
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const status = document.getElementById('status');
+      if (status) status.style.display = 'none';
 
-    if (paymentMethod === 'gcash' && !document.getElementById('proof_file').files.length) {
-      status.textContent = '⚠️ Please upload proof of payment for GCash!';
-      status.className = 'error';
-      status.style.display = 'block';
-      return;
-    }
+      const paymentMethod = document.getElementById('payment_method').value;
 
-    try {
-      const { data, error } = await supabase
-        .from('vip_members')
-        .insert([formData]);
+      if (paymentMethod === 'gcash') {
+        const fileInput = document.getElementById('proof_file');
+        if (!fileInput || !fileInput.files.length) {
+          if (status) {
+            status.textContent = '⚠️ Please upload proof of payment for GCash!';
+            status.className = 'error';
+            status.style.display = 'block';
+          }
+          return;
+        }
+      }
 
-      if (error) throw error;
+      const formData = {
+        firstname: document.getElementById('firstname').value,
+        middlename: document.getElementById('middlename').value,
+        lastname: document.getElementById('lastname').value,
+        contact: document.getElementById('contact').value,
+        birthday: document.getElementById('birthday').value,
+        email: document.getElementById('email').value,
+        address: document.getElementById('address').value,
+        payment_method: paymentMethod
+      };
 
-      status.textContent = '✅ Registered Successfully! Welcome to CAF8NITY VIP! 🎉';
-      status.className = 'success';
-      status.style.display = 'block';
-      document.getElementById('vipForm').reset();
-      document.getElementById('proofField').style.display = 'none';
+      try {
+        const { error } = await supabase.from('vip_members').insert([formData]);
+        if (error) throw error;
 
-    } catch (err) {
-      console.error(err);
-      status.textContent = '❌ Error: ' + err.message;
-      status.className = 'error';
-      status.style.display = 'block';
-    }
+        if (status) {
+          status.textContent = '✅ Registered Successfully! Welcome to CAF8NITY VIP! 🎉';
+          status.className = 'success';
+          status.style.display = 'block';
+        }
+        form.reset();
+        const proofField = document.getElementById('proofField');
+        if (proofField) proofField.style.display = 'none';
+
+      } catch (err) {
+        console.error(err);
+        if (status) {
+          status.textContent = '❌ Error: ' + (err.message || 'Something went wrong');
+          status.className = 'error';
+          status.style.display = 'block';
+        }
+      }
+    });
   });
 </script>
 </body>
