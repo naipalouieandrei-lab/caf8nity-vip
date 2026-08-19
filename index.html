@@ -102,7 +102,7 @@
   function toggleProof() {
     const method = document.getElementById('payment_method').value;
     const field = document.getElementById('proofField');
-    if (field) field.style.display = method === 'gcash' ? 'block' : 'none';
+    if (field) field.style.display = method === 'gcash' ? 'block ' : 'none';
   }
 
   document.addEventListener('DOMContentLoaded', function() {
