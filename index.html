@@ -97,7 +97,7 @@
 <script>
   const SUPABASE_URL = "https://cjbpswnrb0igfjghpby.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7fSkP-so9DE-C40tA_pk7_c0mV";
-  let supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+   window.supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   function toggleProof() {
     const method = document.getElementById('payment_method').value;
@@ -140,7 +140,7 @@
       };
 
       try {
-        const { error } = await supabase.from('vip_members').insert([formData]);
+        const { error } = await supabaseClient.from('vip_members').insert([formData]);
         if (error) throw error;
 
         if (status) {
