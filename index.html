@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAF8NITY VIP Card</title>
+  <!-- Supabase Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f7f2ed; padding: 20px; line-height: 1.6; }
+    .container { max-width: 750px; margin: auto; background: white; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: hidden; }
+
+    /* HEADER */
+    .header { background: linear-gradient(135deg, #6F4E37, #A67C52); color: white; padding: 30px; text-align: center; }
+    .header h1 { font-size: 2rem; margin-bottom: 8px; }
+    .header p { opacity: 0.95; font-size: 1.1rem; }
+
+    /* PERKS */
+    .perks { padding: 25px 30px; background: #fffaf5; }
+    .perks h2 { color: #5a3e2b; margin-bottom: 15px; font-size: 1.3rem; }
+    .perks ul { list-style: none; }
+    .perks li { padding: 8px 0; border-bottom: 1px solid #f0e6dd; font-size: 1.05rem; }
+    .perks li:last-child { border-bottom: none; }
+
+    /* FORM */
+    .form-section { padding: 30px; }
+    .form-section h2 { color: #5a3e2b; margin-bottom: 20px; text-align: center; }
+    label { display: block; margin: 14px 0 6px; font-weight: 600; color: #444; }
+    input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+    .hint { font-size: 0.9rem; color: #666; margin-top: 5px; }
+    button { width: 100%; padding: 15px; margin-top: 25px; background: #6F4E37; color: white; border: none; border-radius: 10px; font-size: 1.15rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    button:hover { background: #543728; }
+    #status { margin-top: 15px; text-align: center; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <h1>☕ CAF8NITY VIP CARD</h1>
+      <p>Get 1 FULL YEAR of exclusive privileges!</p>
+    </div>
+
+    <!-- PERKS LIST -->
+    <div class="perks">
+      <h2>🎁 Your VIP Benefits:</h2>
+      <ul>
+        <li>✅ <strong>50% OFF</strong> — Every Saturday</li>
+        <li>✅ <strong>10% OFF</strong> — Min. ₱300 single receipt</li>
+        <li>✅ <strong>20% OFF</strong> — Min. ₱600 single receipt</li>
+        <li>✅ <strong>FREE ICED/HOT COFFEE</strong> — 1 whole year!</li>
+        <li>✅ <strong>FREE ACCESS:</strong> Live Acoustic & Function Room (Sat 6PM-10PM)</li>
+        <li>✅ <strong>FREE PHOTOBOOTH:</strong> Every Saturday 7PM-9PM</li>
+        <li>✅ <strong>BIRTHDAY SPECIAL PERKS!</strong></li>
+      </ul>
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <div class="form-section">
+      <h2>📝 Register Your VIP Account</h2>
+      <form id="vipForm">
+        <label>First Name *</label>
+        <input type="text" id="firstname" required>
+
+        <label>Middle Name</label>
+        <input type="text" id="middlename">
+
+        <label>Last Name *</label>
+        <input type="text" id="lastname" required>
+
+        <label>Contact Number *</label>
+        <input type="text" id="contact" required>
+
+        <label>Birthday *</label>
+        <input type="date" id="birthday" required>
+
+        <label>Email Address *</label>
+        <input type="email" id="email" required>
+
+        <label>Full Address *</label>
+        <input type="text" id="address" required>
+
+        <label>Payment Method *</label>
+        <select id="payment_method" required>
+          <option value="">-- Select Payment --</option>
+          <option value="gcash">GCash</option>
+          <option value="cash">Cash at Store</option>
+        </select>
+
+        <label>Proof of Payment <small>(Required if GCash)</small></label>
+        <input type="file" id="proof" accept="image/*">
+        <p class="hint">💡 If paying via GCash, upload screenshot/receipt here. If Cash, leave empty.</p>
+
+        <button type="submit"> REGISTER </button>
+        <div id="status"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUPABASE CONNECTION & LOGIC -->
+  <script>
+    // ✅ YOUR CORRECT SUPABASE DETAILS
+    const SUPABASE_URL = "https://cjbpswnnbolgjfghpby.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_0VNbn7fSkP-so9DE-C48tA_pk7_c-9m2gQ";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('vipForm');
+      const status = document.getElementById('status');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.textContent = "⏳ Saving your info... Please wait.";
+        status.style.color = "#2196F3";
+
+        // Get values
+        const firstname = document.getElementById('firstname').value.trim();
+        const middlename = document.getElementById('middlename').value.trim();
+        const lastname = document.getElementById('lastname').value.trim();
+        const contact = document.getElementById('contact').value.trim();
+        const birthday = document.getElementById('birthday').value;
+        const email = document.getElementById('email').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const payment_method = document.getElementById('payment_method').value;
+        const proofFile = document.getElementById('proof').files[0];
+
+        // ✅ Validation
+        if (payment_method === "gcash" && !proofFile) {
+          status.textContent = "❌ GCash requires proof of payment image!";
+          status.style.color = "red";
+          return;
+        }
+
+        let proof_url = null;
+        try {
+          // Upload proof image if exists
+          if (proofFile) {
+            const fileName = ${Date.now()}_${proofFile.name};
+            const { data: uploadData, error: uploadErr } = await supabase.storage
+              .from('proofs')
+              .upload(fileName, proofFile);
+
+            if (uploadErr) throw uploadErr;
+            const { data: { publicUrl } } = supabase.storage.from('proofs').getPublicUrl(fileName);
+            proof_url = publicUrl;
+          }
+
+          // Insert into database
+          const { error } = await supabase.from('vip_members').insert([{
+            firstname, middlename, lastname, contact, birthday, email, address, payment_method, proof_url
+          }]);
+
+          if (error) throw error;
+
+          status.textContent = "✅ SUCCESS! You are now a CAF8NITY VIP!";
+          status.style.color = "green";
+          form.reset();
+        } catch (err) {
+          console.error(err);
+          status.textContent = "❌ Error: " + err.message;
+          status.style.color = "red";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
