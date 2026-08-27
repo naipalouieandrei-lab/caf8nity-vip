@@ -98,16 +98,23 @@
   const SUPABASE_ANON_KEY = "sb_publishable_0VNbn7fSkP-so9DE-C48tA_pk7_c-9m2gQ";
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  // ✅ ITO ANG NAGPAPAKITA NG UPLOAD BOX KAPAG GCASH
   function toggleProof() {
     var method = document.getElementById('payment_method').value;
     var field = document.getElementById('proofField');
-    if (field) field.style.display = (method === 'gcash') ? 'block' : 'none';
+    if (field) {
+      field.style.display = (method === 'gcash') ? 'block' : 'none';
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    // ✅ KAPAG NAGBAGO ANG PAYMENT METHOD — LALABAS ANG UPLOAD BOX
     var select = document.getElementById('payment_method');
-    if (select) select.addEventListener('change', toggleProof);
-    
+    if (select) {
+      select.addEventListener('change', toggleProof);
+      toggleProof(); // ✅ Awtomatikong tignan pagbukas pa lang ng page
+    }
+
     var form = document.getElementById('vipForm');
     var status = document.getElementById('status');
     if (!form) return;
@@ -133,6 +140,7 @@
         return;
       }
 
+      // ✅ KAPAG GCASH — KAILANGAN NG UPLOAD
       if (payment_method === 'gcash' && !proofFile) {
         status.textContent = '⚠️ Kailangan mag-upload ng Proof of Payment para sa GCash!';
         status.style.display = 'block';
@@ -144,7 +152,7 @@
         if (payment_method === 'gcash') {
           var fileExt = proofFile.name.split('.').pop();
           var fileName = Date.now() + '_' + Math.random().toString(36).substr(2, 9) + '.' + fileExt;
-          var { error: upErr, data } = await supabase.storage.from('payment_proofs').upload(fileName, proofFile);
+          var { error: upErr } = await supabase.storage.from('payment_proofs').upload(fileName, proofFile);
           if (upErr) throw upErr;
           const { data: { publicUrl } } = supabase.storage.from('payment_proofs').getPublicUrl(fileName);
           proof_url = publicUrl;
