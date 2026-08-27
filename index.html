@@ -119,7 +119,6 @@
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       status.style.display = 'none';
-      status.className = '';
       status.textContent = '';
 
       var firstname = document.getElementById('firstname').value.trim();
@@ -134,7 +133,6 @@
 
       if (!firstname || !lastname || !contact || !birthday || !email || !address || !payment_method) {
         status.textContent = '❌ Punan ang lahat ng required fields!';
-        status.className = 'error';
         status.style.display = 'block';
         return;
       }
@@ -145,59 +143,35 @@
         if (payment_method === 'gcash') {
           if (!proofFile) {
             status.textContent = '⚠️ Kailangan mag-upload ng Proof of Payment para sa GCash!';
-            status.className = 'error';
             status.style.display = 'block';
             return;
           }
-
           var fileExt = proofFile.name.split('.').pop();
           var fileName = Date.now() + '_' + Math.random().toString(36).substr(2, 9) + '.' + fileExt;
-          var filePath = fileName;
-
-          var { error: uploadError } = await supabase.storage
-            .from('payment_proofs')
-            .upload(filePath, proofFile);
-
-          if (uploadError) throw uploadError;
-
-          var { data: urlData } = supabase.storage
-            .from('payment_proofs')
-            .getPublicUrl(filePath);
-
+          var { error: upErr } = await supabase.storage.from('payment_proofs').upload(fileName, proofFile);
+          if (upErr) throw upErr;
+          var { data: urlData } = supabase.storage.from('payment_proofs').getPublicUrl(fileName);
           proof_url = urlData.publicUrl;
         }
 
         var { error } = await supabase.from('vip_members').insert([{
-          firstname: firstname,
-          middlename: middlename,
-          lastname: lastname,
-          contact: contact,
-          birthday: birthday,
-          email: email,
-          address: address,
-          payment_method: payment_method,
-          proof_url: proof_url
+          firstname, middlename, lastname, contact, birthday, email, address, payment_method, proof_url
         }]);
-
         if (error) throw error;
 
         status.textContent = '✅ REGISTERED SUCCESSFULLY! 🎉 Welcome to CAF8NITY VIP!';
-        status.className = 'success';
         status.style.display = 'block';
         form.reset();
-        if (document.getElementById('proofField')) {
-          document.getElementById('proofField').style.display = 'none';
-        }
+        if (document.getElementById('proofField')) document.getElementById('proofField').style.display = 'none';
 
       } catch (err) {
-        console.error(err);
         status.textContent = '❌ Error: ' + (err.message || 'Something went wrong');
-        status.className = 'error';
         status.style.display = 'block';
       }
     });
   });
 </script>
+
 </body>
 </html>
 <!-- Update: Fixed syntax error -->
