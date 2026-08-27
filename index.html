@@ -99,7 +99,7 @@
 <script>
   const SUPABASE_URL = "https://cjbpswnnbolgjfghpby.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_0VNbn7fSkP-so9DE-C48tA_pk7_c-9m2gQ";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   function toggleProof() {
     var m = document.getElementById('payment_method').value;
@@ -148,13 +148,13 @@
         if (data.payment_method === 'gcash' && file) {
           var ext = file.name.split('.').pop();
           var name = Date.now() + '_' + Math.random().toString(36).slice(2, 10) + '.' + ext;
-          var { error: upErr } = await supabase.storage.from('payment_proofs').upload(name, file);
+          var { error: upErr } = await supabaseClient.storage.from('payment_proofs').upload(name, file);
           if (upErr) throw upErr;
-          var { data: urlData } = supabase.storage.from('payment_proofs').getPublicUrl(name);
+          var { data: urlData } = supabaseClient.storage.from('payment_proofs').getPublicUrl(name);
           data.proof_url = urlData.publicUrl;
         }
 
-        var { error } = await supabase.from('vip_members').insert([data]);
+        var { error } = await supabaseClient.from('vip_members').insert([data]);
         if (error) throw error;
 
         status.textContent = '✅ REGISTERED SUCCESSFULLY! 🎉 Welcome to CAF8NITY VIP!';
