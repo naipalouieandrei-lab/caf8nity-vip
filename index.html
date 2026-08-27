@@ -95,17 +95,21 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-<script>
+  // === SUPABASE DETAILS ===
   const SUPABASE_URL = "https://cjbpswnnbolgjfghpby.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_0VNbn7fSkP-so9DE-C48tA_pk7_c-9m2gQ";
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  // === SHOW/HIDE PROOF UPLOAD ===
   function toggleProof() {
     const method = document.getElementById('payment_method').value;
     const field = document.getElementById('proofField');
-    if (field) field.style.display = method === 'gcash' ? 'block' : 'none';
+    if (field) {
+      field.style.display = (method === 'gcash') ? 'block' : 'none';
+    }
   }
 
+  // === FORM SUBMIT ===
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('vipForm');
     const status = document.getElementById('status');
@@ -117,6 +121,7 @@
       status.className = '';
       status.textContent = '';
 
+      // Kunin ang lahat ng value
       const firstname = document.getElementById('firstname').value.trim();
       const middlename = document.getElementById('middlename').value.trim();
       const lastname = document.getElementById('lastname').value.trim();
@@ -127,6 +132,7 @@
       const payment_method = document.getElementById('payment_method').value;
       const proofFile = document.getElementById('proof_file').files[0];
 
+      // Validation
       if (!firstname || !lastname || !contact || !birthday || !email || !address || !payment_method) {
         status.textContent = '❌ Punan ang lahat ng required fields!';
         status.className = 'error';
@@ -137,6 +143,7 @@
       let proof_url = null;
 
       try {
+        // === UPLOAD PROOF KUNG GCASH ===
         if (payment_method === 'gcash') {
           if (!proofFile) {
             status.textContent = '⚠️ Kailangan mag-upload ng Proof of Payment para sa GCash!';
@@ -149,12 +156,14 @@
           const fileName = ${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt};
           const filePath = ${fileName};
 
+          // I-upload sa Supabase Storage
           const { error: uploadError } = await supabase.storage
             .from('payment_proofs')
             .upload(filePath, proofFile);
 
           if (uploadError) throw uploadError;
 
+          // Kunin ang Public URL
           const { data: urlData } = supabase.storage
             .from('payment_proofs')
             .getPublicUrl(filePath);
@@ -162,17 +171,19 @@
           proof_url = urlData.publicUrl;
         }
 
+        // === I-SAVE SA DATABASE ===
         const { error } = await supabase.from('vip_members').insert([{
           firstname, middlename, lastname, contact, birthday, email, address, payment_method, proof_url
         }]);
 
         if (error) throw error;
 
+        // ✅ SUCCESS
         status.textContent = '✅ REGISTERED SUCCESSFULLY! 🎉 Welcome to CAF8NITY VIP!';
         status.className = 'success';
         status.style.display = 'block';
         form.reset();
-        if (document.getElementById('proof_field')) document.getElementById('proof_field').style.display = 'none';
+        if (document.getElementById('proofField')) document.getElementById('proofField').style.display = 'none';
 
       } catch (err) {
         console.error(err);
@@ -182,8 +193,6 @@
       }
     });
   });
-</script>
-<!-- ✅ HANGGANG DITO LANG ANG BAGONG CODE -->
 </script>
 </body>
 </html>
