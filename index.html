@@ -95,75 +95,99 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0amJwc3ducmJvaWdmZ2hwYnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1OTc3ODksImV4cCI6MjEwMjE3Mzc4OX0.YTy404CTIHXQfFnEL5N1sM9-9gbEzTZBWVqSIn8F1cM";
+  <!-- KEEP LANG ITO SA LINE 96 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-function toggleProof() {
-      const method = document.getElementById('payment_method').value;
-      const field = document.getElementById('proofField');
-      if (field) field.style.display = method === 'gcash' ? 'block' : 'none';
-    }
-  document.addEventListener('DOMContentLoaded', function() {
-    // ✅ GUMAGAWA LANG NG CLIENT PAGKATAPUS MAG-LOAD ANG PAGE AT LIBRARY!
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<!-- ✅ DITO MO IPAPASTE ANG BAGONG CODE → SIMULA DITO ↓ -->
+<script>
+  const SUPABASE_URL = "https://cjbpswnnbolgjfghpby.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_0VNbn7fSkP-so9DE-C48tA_pk7_c-9m2gQ";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  
+  function toggleProof() {
+    const method = document.getElementById('payment_method').value;
+    const field = document.getElementById('proof_field');
+    if (field) field.style.display = method === 'gcash' ? 'block' : 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('vipForm');
+    const status = document.getElementById('status');
     if (!form) return;
 
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const status = document.getElementById('status');
-      if (status) status.style.display = 'none';
+      status.style.display = 'none';
+      status.className = '';
+      status.textContent = '';
 
-      const paymentMethod = document.getElementById('payment_method').value;
+      const firstname = document.getElementById('firstname').value.trim();
+      const middlename = document.getElementById('middlename').value.trim();
+      const lastname = document.getElementById('lastname').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+      const birthday = document.getElementById('birthday').value;
+      const email = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const payment_method = document.getElementById('payment_method').value;
+      const proofFile = document.getElementById('proof_file').files[0];
 
-      if (paymentMethod === 'gcash') {
-        const fileInput = document.getElementById('proof_file');
-        if (!fileInput || !fileInput.files.length) {
-          if (status) {
-            status.textContent = '⚠️ Please upload proof of payment for GCash!';
-            status.className = 'error';
-            status.style.display = 'block';
-          }
-          return;
-        }
+      if (!firstname || !lastname || !contact || !birthday || !email || !address || !payment_method) {
+        status.textContent = '❌ Punan ang lahat ng required fields!';
+        status.className = 'error';
+        status.style.display = 'block';
+        return;
       }
 
-      const formData = {
-        firstname: document.getElementById('firstname').value,
-        middlename: document.getElementById('middlename').value,
-        lastname: document.getElementById('lastname').value,
-        contact: document.getElementById('contact').value,
-        birthday: document.getElementById('birthday').value,
-        email: document.getElementById('email').value,
-        address: document.getElementById('address').value,
-        payment_method: paymentMethod
-      };
+      let proof_url = null;
 
       try {
-        const { error } = await supabase.from('vip_members').insert([formData]);
+        if (payment_method === 'gcash') {
+          if (!proofFile) {
+            status.textContent = '⚠️ Kailangan mag-upload ng Proof of Payment para sa GCash!';
+            status.className = 'error';
+            status.style.display = 'block';
+            return;
+          }
+
+          const fileExt = proofFile.name.split('.').pop();
+          const fileName = ${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt};
+          const filePath = ${fileName};
+
+          const { error: uploadError } = await supabase.storage
+            .from('payment_proofs')
+            .upload(filePath, proofFile);
+
+          if (uploadError) throw uploadError;
+
+          const { data: urlData } = supabase.storage
+            .from('payment_proofs')
+            .getPublicUrl(filePath);
+
+          proof_url = urlData.publicUrl;
+        }
+
+        const { error } = await supabase.from('vip_members').insert([{
+          firstname, middlename, lastname, contact, birthday, email, address, payment_method, proof_url
+        }]);
+
         if (error) throw error;
 
-        if (status) {
-          status.textContent = '✅ Registered Successfully! Welcome to CAF8NITY VIP! 🎉';
-          status.className = 'success';
-          status.style.display = 'block';
-        }
+        status.textContent = '✅ REGISTERED SUCCESSFULLY! 🎉 Welcome to CAF8NITY VIP!';
+        status.className = 'success';
+        status.style.display = 'block';
         form.reset();
-        const proofField = document.getElementById('proofField');
-        if (proofField) proofField.style.display = 'none';
+        if (document.getElementById('proof_field')) document.getElementById('proof_field').style.display = 'none';
 
       } catch (err) {
         console.error(err);
-        if (status) {
-          status.textContent = '❌ Error: ' + (err.message || 'Something went wrong');
-          status.className = 'error';
-          status.style.display = 'block';
-        }
+        status.textContent = '❌ Error: ' + (err.message || 'Something went wrong');
+        status.className = 'error';
+        status.style.display = 'block';
       }
     });
   });
+</script>
+<!-- ✅ HANGGANG DITO LANG ANG BAGONG CODE -->
 </script>
 </body>
 </html>
