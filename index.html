@@ -94,7 +94,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
+<script>
   const SUPABASE_URL = "https://cjbpswnnbolgjfghpby.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_0VNbn7fSkP-so9DE-C48tA_pk7_c-9m2gQ";
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -103,11 +103,7 @@
     var method = document.getElementById('payment_method').value;
     var field = document.getElementById('proofField');
     if (field) {
-      if (method === 'gcash') {
-        field.style.display = 'block';
-      } else {
-        field.style.display = 'none';
-      }
+      field.style.display = (method === 'gcash') ? 'block' : 'none';
     }
   }
 
