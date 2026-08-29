@@ -75,27 +75,21 @@
         <input type="text" id="address" required>
 
         <label>Payment Method *</label>
-        <select id="payment_method">
-          <option value="">-- Select Payment --</option>
-          <option value="gcash">GCash</option>
-          <option value="cash">Cash</option>
-        </select>
+       <select id="payment_method" required>
+  <option value="">— Select Payment —</option>
+  <option value="Cash">Cash</option>
+  <option value="GCash">GCash</option>
+</select>
 
-        <div id="proofField" style="display:none;">
-          <label>Upload Proof of Payment (GCash) *</label>
-          <input type="file" id="proof_file" accept="image/*">
-          <p class="note">Please upload screenshot of your GCash payment</p>
-        </div>
-
-        <button type="submit">✅ REGISTER NOW</button>
-        <div id="status"></div>
-      </form>
-    </div>
-  </div>
+<div style="background: #f8ede5; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #2563eb;">
+  <p><strong>📱 GCash Payment Details:</strong></p>
+  <p>Account Name: <strong>CAF8NITY</strong></p>
+  <p>GCash Number: <strong>09262713931</strong></p>
+  <p style="font-size:13px; color:#530101; margin-top:5px;">* Send payment to the number above. Thank you!</p>
+</div>
+        
  <!-- SUPABASE LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- ANG CODE MO -->
 <script>
   const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7f5kP-so9DE-C40tA_pk7_c0mV";
