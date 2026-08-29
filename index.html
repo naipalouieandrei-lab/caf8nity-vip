@@ -93,13 +93,16 @@
     </div>
   </div>
         
- <!-- SUPABASE LIBRARY -->
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
 <script>
+
 const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7f5kP-so9DE-C40tA_pk7_c0mV";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Hindi na gagamitin — walang upload
 function toggleProof() {}
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -123,18 +126,12 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     try {
-      const { error } = await supabaseClient
-        .from('vip_members')
-        .insert([data]);
-
+      const { error } = await supabaseClient.from('vip_members').insert([data]);
       if (error) throw error;
-
       status.innerHTML = '<div style="background:#d4edda;color:#155724;padding:15px;border-radius:8px;text-align:center;">🎉 Registered Successfully! Welcome to CAF8NITY VIP!</div>';
       status.style.display = 'block';
       form.reset();
-      
     } catch (err) {
-      console.error(err);
       status.innerHTML = '<div style="background:#f8d7da;color:#721c24;padding:12px;border-radius:8px;">Error: ' + err.message + '</div>';
       status.style.display = 'block';
     }
