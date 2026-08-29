@@ -88,36 +88,39 @@
   <p style="font-size:13px; color:#530101; margin-top:5px;">* Send payment to the number above. Thank you!</p>
 </div>
 <button type ="submit" class="btn">✅ REGISTER NOW</button>
-<div id="status"></div>
+<div id="status" style="display:none; margin-top:15px;"></div>
       </form>
     </div>
   </div>
         
-<!-- SUPABASE LIBRARY — DAPAT UNA! -->
+<!-- SUPABASE LIBRARY — WAG GALAWIN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- MAIN SCRIPT -->
+<!-- BUONG SCRIPT — ITO LANG ANG PALITAN -->
 <script>
 const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7f5kP-so9DE-C40tA_pk7_c0mV";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener('DOMContentLoaded', function () {
-  console.log("✅ Script loaded!");
-
   const form = document.getElementById('vipForm');
   const status = document.getElementById('status');
 
-  if (!form || !status) {
-    console.log("❌ Form or Status not found!");
-    return;
-  }
+  if (!form || !status) return;
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    console.log("✅ Form submitted!");
-    
-    status.innerHTML = '<div style="background:#fff3cd;color:#856404;padding:15px;border-radius:8px;text-align:center;">⏳ Saving...</div>';
+
+    // NAGLILIPAT NG MESSAGE — SIGURADONG LALABAS SA SCREEN
+    status.style.display = 'block';
+    status.style.background = '#fff3cd';
+    status.style.color = '#856404';
+    status.style.padding = '15px';
+    status.style.borderRadius = '8px';
+    status.style.textAlign = 'center';
+    status.style.fontSize = '16px';
+    status.style.marginTop = '15px';
+    status.innerHTML = '⏳ Saving...';
 
     const data = {
       firstname: document.getElementById('firstname').value.trim(),
@@ -133,13 +136,17 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       const { error } = await supabaseClient.from('vip_members').insert([data]);
       if (error) throw error;
-      
-      console.log("✅ Saved!");
-      status.innerHTML = '<div style="background:#d4edda;color:#155724;padding:15px;border-radius:8px;text-align:center;">🎉 Registered Successfully! Welcome to CAF8NITY VIP!</div>';
+
+      // ✅ SUCCESS MESSAGE — SIGURADONG LALABAS SA SCREEN!
+      status.style.background = '#d4edda';
+      status.style.color = '#155724';
+      status.innerHTML = '🎉 Registered Successfully! Welcome to CAF8NITY VIP! 🎊';
       form.reset();
+
     } catch (err) {
-      console.log("❌ Error:", err);
-      status.innerHTML = '<div style="background:#f8d7da;color:#721c24;padding:12px;border-radius:8px;">Error: ' + err.message + '</div>';
+      status.style.background = '#f8d7da';
+      status.style.color = '#721c24';
+      status.innerHTML = '❌ Error: ' + err.message;
     }
   });
 });
