@@ -94,79 +94,52 @@
   </div>
         
  <!-- SUPABASE LIBRARY -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7f5kP-so9DE-C40tA_pk7_c0mV";
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7f5kP-so9DE-C40tA_pk7_c0mV";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function toggleProof() {
-    var m = document.getElementById('payment_method').value;
-    var f = document.getElementById('proofField');
-    if (f) f.style.display = (m === 'gcash') ? 'block' : 'none';
-  }
+// Hindi na gagamitin — walang upload
+function toggleProof() {}
 
-  document.addEventListener('DOMContentLoaded', function () {
-    var sel = document.getElementById('payment_method');
-    if (sel) sel.addEventListener('change', toggleProof);
+document.addEventListener('DOMContentLoaded', function () {
+  var form = document.getElementById('vipForm');
+  var status = document.getElementById('status');
+  if (!form) return;
 
-    var form = document.getElementById('vipForm');
-    var status = document.getElementById('status');
-    if (!form) return;
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    status.style.display = 'none';
 
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      status.style.display = 'none';
+    const data = {
+      firstname: document.getElementById('firstname').value.trim(),
+      middlename: document.getElementById('middlename').value.trim(),
+      lastname: document.getElementById('lastname').value.trim(),
+      contact: document.getElementById('contact').value.trim(),
+      birthday: document.getElementById('birthday').value,
+      email: document.getElementById('email').value.trim() || null,
+      address: document.getElementById('address').value.trim(),
+      payment_method: document.getElementById('payment_method').value
+    };
 
-      var data = {
-        firstname: document.getElementById('firstname').value.trim(),
-        middlename: document.getElementById('middlename').value.trim(),
-        lastname: document.getElementById('lastname').value.trim(),
-        contact: document.getElementById('contact').value.trim(),
-        birthday: document.getElementById('birthday').value,
-        email: document.getElementById('email').value.trim(),
-        address: document.getElementById('address').value.trim(),
-        payment_method: document.getElementById('payment_method').value,
-        proof_url: null
-      };
+    try {
+      const { error } = await supabaseClient
+        .from('vip_members')
+        .insert([data]);
 
-      if (!data.firstname || !data.lastname || !data.contact || !data.birthday || !data.email || !data.address || !data.payment_method) {
-        status.textContent = '❌ Punan lahat ng required fields!';
-        status.style.display = 'block';
-        return;
-      }
+      if (error) throw error;
 
-      var file = document.getElementById('proof_file').files[0];
-      if (data.payment_method === 'gcash' && !file) {
-        status.textContent = '⚠️ Kailangan mag-upload ng Proof of Payment!';
-        status.style.display = 'block';
-        return;
-      }
-
-      try {
-        if (data.payment_method === 'gcash' && file) {
-          var ext = file.name.split('.').pop();
-          var name = Date.now() + '_' + Math.random().toString(36).slice(2, 10) + '.' + ext;
-          var { error: upErr } = await supabaseClient.storage.from('payment_proofs').upload(name, file);
-          if (upErr) throw upErr;
-          var { data: urlData } = supabaseClient.storage.from('payment_proofs').getPublicUrl(name);
-          data.proof_url = urlData.publicUrl;
-        }
-
-        var { error } = await supabaseClient.from('vip_members').insert([data]);
-        if (error) throw error;
-
-        status.textContent = '✅ REGISTERED SUCCESSFULLY! 🎉 Welcome to CAF8NITY VIP!';
-        status.style.display = 'block';
-        form.reset();
-        if (document.getElementById('proofField')) document.getElementById('proofField').style.display = 'none';
-      } catch (err) {
-        console.error(err);
-        status.textContent = '❌ Error: ' + (err.message || 'Submission failed');
-        status.style.display = 'block';
-      }
-    });
+      status.innerHTML = '<div style="background:#d4edda;color:#155724;padding:15px;border-radius:8px;text-align:center;">🎉 Registered Successfully! Welcome to CAF8NITY VIP!</div>';
+      status.style.display = 'block';
+      form.reset();
+      
+    } catch (err) {
+      console.error(err);
+      status.innerHTML = '<div style="background:#f8d7da;color:#721c24;padding:12px;border-radius:8px;">Error: ' + err.message + '</div>';
+      status.style.display = 'block';
+    }
   });
+});
 </script>
 </body>
 </html>
