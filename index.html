@@ -32,34 +32,36 @@
 </head>
 <body>
   
-<div style="text-align: center; margin: 25px 0;">
+<!-- ✅ BUTTON — KASING LAPAD NG FORM -->
+<div style="max-width: 450px; margin: 25px auto; text-align: center;">
   <button 
-    id="noteBtn" 
+    id="noteBtn"
     onclick="toggleNote()"
-    style="background: linear-gradient(135deg, #6B4423, #8B5A2B); color: white; border: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(107,68,35,0.3); transition: all 0.3s ease;"
+    style="width: 100%; background: #8B5A2B; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer;"
   >
-    📩 IMPORTANT NOTE BEFORE YOU CONTINUE
+    📩 CLICK THIS — IMPORTANT NOTE BEFORE YOU CONTINUE
   </button>
 </div>
 
-
+<!-- ✅ ANG NOTE — NAKATAGO MUNA -->
 <div 
-  id="importantNote" 
-  style="display: none; background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 20px; margin: 0 20px 25px 20px; text-align: center; animation: fadeIn 0.3s ease-in;"
+  id="importantNote"
+  style="display: none; max-width: 450px; margin: 0 auto 25px auto; background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 18px; text-align: center;"
 
-  <h4 style="margin: 0 0 12px 0; color: #856404; font-size: 17px;">📩 PLEASE READ THIS FIRST!</h4>
-  <p style="margin: 0; color: #856404; font-size: 15px; line-height: 1.8;">
+  <h4 style="margin: 0 0 10px 0; color: #856404; font-size: 16px;">📩 PLEASE READ THIS FIRST!</h4>
+  <p style="margin: 0; color: #856404; font-size: 14px; line-height: 1.7;">
     Please add <strong>caf8nity@email.com</strong> to your contacts so our emails go straight to your <strong>Inbox</strong> and NOT to Spam/Junk folder! 💌<br><br>
     If you don't receive our message within <strong>5 minutes</strong>, please check your <strong>Spam / Junk folder</strong>! ✅
   </p>
   <button 
     onclick="toggleNote()"
-    style="margin-top: 15px; background: #856404; color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;"
+    style="margin-top: 14px; background: #856404; color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;"
   >
     ✅ Got it! Close this note
   </button>
 </div>
 
+<!-- ✅ SCRIPT — PARA GUMAGANA ANG BUTTON -->
 <script>
 function toggleNote() {
   const note = document.getElementById('importantNote');
@@ -68,12 +70,6 @@ function toggleNote() {
 </script>
 
 
-<style>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
   <div class="container">
     <div class="header">
       <h1>☕ CAF8NITY VIP CARD</h1>
