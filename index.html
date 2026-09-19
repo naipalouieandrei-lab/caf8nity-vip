@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Para hindi malaki sa cellphone */
         @media (max-width: 480px) {
             body { font-size: 14px !important; }
             .kahon { padding: 15px !important; max-width: 95% !important; }
@@ -72,7 +71,7 @@
                         <label>Last Name</label>
                     </div>
                     <div class="larangan">
-                        <input type="tel" id="phonenumber" required placeholder=" "
+                        <input type="tel" id="contact" required placeholder=" "
                             onfocus="palit('Contact number mo 📱'); buksanBibig()"
                             onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()"
                             oninput="bibilisBibig()">
@@ -102,7 +101,7 @@
                     </div>
                 </div>
                 <div class="larangan buo">
-                    <select id="payment" required onchange="bayad(this.value)">
+                    <select id="paymentmethod" required onchange="bayad(this.value)">
                         <option value=""></option>
                         <option value="cash">Cash</option>
                         <option value="gcash">GCash</option>
@@ -160,11 +159,11 @@
                 firstname: document.getElementById('firstname').value,
                 middlename: document.getElementById('middlename').value || null,
                 lastname: document.getElementById('lastname').value,
-                phonenumber: document.getElementById('phonenumber').value,
+                contact: document.getElementById('contact').value,
                 address: document.getElementById('address').value,
                 email: document.getElementById('email').value,
                 birthday: document.getElementById('birthday').value,
-                paymentmethod: document.getElementById('payment').value
+                paymentmethod: document.getElementById('paymentmethod').value
             };
 
             palit('Salamat! ✅');
