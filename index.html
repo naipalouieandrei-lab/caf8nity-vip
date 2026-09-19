@@ -1,195 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAF8NITY VIP Card</title>
-  
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background: #f7f2ed; padding: 20px; line-height: 1.6; }
-    .container { max-width: 750px; margin: auto; background: white; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: hidden; }
-    .header { background: linear-gradient(135deg, #6f4e37 0%, #4a3528 100%); color: white; padding: 30px 20px; text-align: center; }
-    .header h1 { font-size: 28px; margin-bottom: 8px; }
-    .header p { opacity: 0.9; font-size: 16px; }
-    .perks { padding: 25px 20px; background: #fff9f2; }
-    .perks h2 { text-align: center; color: #6f4e37; margin-bottom: 20px; font-size: 22px; }
-    .perks ul { list-style: none; }
-    .perks li { padding: 10px 0; border-bottom: 1px dashed #ddd; font-size: 16px; }
-    .perks li:last-child { border-bottom: none; }
-    strong { color: #2c1810; }
-    .form-section { padding: 30px 20px; }
-    .form-section h2 { text-align: center; color: #6f4e37; margin-bottom: 25px; font-size: 22px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; }
-    input, select { width: 100%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; }
-    button { width: 100%; padding: 14px; background: #6f4e37; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    button:hover { background: #543a2a; }
-    .note { font-size: 14px; color: #777; margin-top: -10px; margin-bottom: 15px; }
-    #status { margin-top: 15px; padding: 12px; text-align: center; font-weight: bold; border-radius: 8px; display: none; }
-    .success { background: #d4edda; color: #155724; display: block !important; }
-    .error { background: #f8d7da; color: #721c24; display: block !important; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caf8nity — Register</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  
-<!-- ✅ BUTTON — KASING LAPAD NG FORM -->
-<div style="max-width: 450px; margin: 25px auto; text-align: center;">
-  <button 
-    id="noteBtn"
-    onclick="toggleNote()"
-    style="width: 100%; background: #8B5A2B; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer;"
-  >
-    📩 CLICK THIS — IMPORTANT NOTE BEFORE YOU CONTINUE
-  </button>
+    <div class="page">
+        <div class="bula">
+            <span id="mensahe">Hello! Mag-register na tayo 😊</span>
+        </div>
+
+        <div class="antenna">
+            <div class="tuldok"></div>
+        </div>
+
+        <div class="robot">
+            <div class="ulo">
+                <div class="loob">
+                    <div class="mata">
+                        <div class="eye" id="kaliwa"><div class="pupil"></div></div>
+                        <div class="eye" id="kanan"><div class="pupil"></div></div>
+                    </div>
+                    <div class="bibig" id="bibig">
+                        <div class="loob-bibig"></div>
+                    </div>
+                </div>
+            </div>
+<div class="kamay">
+    <span class="kaliwa"></span>
+    <span class="kanan"></span>
 </div>
 
-<!-- ✅ ANG NOTE — NAKATAGO MUNA -->
-<div 
-  id="importantNote"
-  style="display: none; max-width: 450px; margin: 0 auto 25px auto; background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 18px; text-align: center;"
+        <div class="kahon">
+            <h2>Join Caf8nity</h2>
+            <form id="form">
+                <div class="hanay">
+                    <div class="larangan">
+                        <input type="text" id="firstname" required placeholder=" "
+                            onfocus="palit('Ano ang pangalan mo? 📝'); buksanBibig()"
+                            onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()"
+                            oninput="bibilisBibig()">
+                        <label>First Name</label>
+                    </div>
+                    <div class="larangan">
+                        <input type="text" id="middlename" placeholder=" "
+                            onfocus="palit('May middle name ka ba? Opsyonal lang'); buksanBibig()"
+                            onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()"
+                            oninput="bibilisBibig()">
+                        <label>Middle Name (Optional)</label>
+                    </div>
+                </div>
+                <div class="hanay">
+                    <div class="larangan">
+                        <input type="text" id="lastname" required placeholder=" "
+                            onfocus="palit('Apelyido naman 👋'); buksanBibig()"
+                            onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()"
+                            oninput="bibilisBibig()">
+                        <label>Last Name</label>
+                    </div>
+                    <div class="larangan">
+                        <input type="tel" id="phonenumber" required placeholder=" "
+                            onfocus="palit('Contact number mo 📱'); buksanBibig()"
+                            onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()"
+                            oninput="bibilisBibig()">
+                        <label>Phone / Number</label>
+                    </div>
+                </div>
+                <div class="larangan buo">
+                    <input type="text" id="address" required placeholder=" "
+                        onfocus="palit('Saan ka nakatira? 🏠'); buksanBibig()"
+                        onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()"
+                        oninput="bibilisBibig()">
+                    <label>Complete Address</label>
+                </div>
+                <div class="hanay">
+                    <div class="larangan">
+                        <input type="email" id="email" required placeholder=" "
+                            onfocus="palit('Email mo para padalhan ka natin 📧'); buksanBibig()"
+                            onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()"
+                            oninput="bibilisBibig()">
+                        <label>Email Address</label>
+                    </div>
+                    <div class="larangan">
+                        <input type="date" id="birthday" required placeholder=" "
+                            onfocus="palit('Kailan ang birthday mo? May regalo tayo! 🎂'); buksanBibig()"
+                            onblur="palit('Hello! Mag-register na tayo 😊'); isaraBibig()">
+                        <label>Birthday</label>
+                    </div>
+                </div>
+                <div class="larangan buo">
+                    <select id="payment" required onchange="bayad(this.value)">
+                        <option value=""></option>
+                        <option value="cash">Cash</option>
+                        <option value="gcash">GCash</option>
+                    </select>
+                    <label>Preferred Payment Method</label>
+                </div>
+                <button type="submit">Register Now</button>
+            </form>
+        </div>
 
-  <h4 style="margin: 0 0 10px 0; color: #856404; font-size: 16px;">📩 PLEASE READ THIS FIRST!</h4>
-  <p style="margin: 0; color: #856404; font-size: 14px; line-height: 1.7;">
-    Please add <strong>caf8nity@email.com</strong> to your contacts so our emails go straight to your <strong>Inbox</strong> and NOT to Spam/Junk folder! 💌<br><br>
-    If you don't receive our message within <strong>5 minutes</strong>, please check your <strong>Spam / Junk folder</strong>! ✅
-  </p>
-  <button 
-    onclick="toggleNote()"
-    style="margin-top: 14px; background: #856404; color: white; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;"
-  >
-    ✅ Got it! Close this note
-  </button>
-</div>
-
-<!-- ✅ SCRIPT — PARA GUMAGANA ANG BUTTON -->
-<script>
-function toggleNote() {
-  const note = document.getElementById('importantNote');
-  note.style.display = note.style.display === 'none' ? 'block' : 'none';
-}
-</script>
-
-
-  <div class="container">
-    <div class="header">
-      <h1>☕ CAF8NITY VIP CARD</h1>
-      <p>Get 1 FULL YEAR of exclusive privileges!</p>
+        <div class="paa">
+            <span class="kaliwa"></span>
+            <span class="kanan"></span>
+        </div>
     </div>
 
-    <div class="perks">
-      <h2>🎁 Your VIP Benefits:</h2>
-      <ul>
-        <li>✅ <strong>50% OFF</strong> — Every Saturday</li>
-        <li>✅ <strong>10% OFF</strong> — Min. ₱300 single receipt</li>
-        <li>✅ <strong>20% OFF</strong> — Min. ₱600 single receipt</li>
-        <li>✅ <strong>FREE ICE COFFEE</strong> — 1 whole year! 🧊</li>
-        <li>✅ <strong>FREE ACCESS</strong> — Live Acoustic Band & Function Room Every Saturday 6PM–10PM</li>
-        <li>✅ <strong>FREE PHOTOBOOTH</strong> — Every Saturday 7PM–9PM</li>
-        <li>✅ <strong>BIRTHDAY SPECIAL PERKS</strong> 🎂</li>
-      </ul>
-    </div>
+    <script>
+        const GCASH = "0917-123-4567"; // ← PALITAN MO ITO NG TOTOONG NUMBER MO
 
-    <div class="form-section">
-      <h2>📝 Register Your VIP Account</h2>
-      <form id="vipForm">
-        <label>First Name *</label>
-        <input type="text" id="firstname" required>
+        const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0amJwc3ducmJvaWdmZ2hwYnkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc1NjQwNzU1NCwiZXhwIjIwNzE5NjM1NTR9.8eJQd3YH0U9vZgK9qYhVhIuY2Vhbm9uX2V4YW1wbGU";
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        <label>Middle Name</label>
-        <input type="text" id="middlename">
+        function palit(t) { document.getElementById('mensahe').textContent = t; }
+        function bayad(v) {
+            if (v === 'gcash') { palit(`GCash: ${GCASH} 💚`); buksanBibig(); }
+            else if (v === 'cash') { palit('Sige, magbayad tayo sa pagkuha! 💵'); buksanBibig(); }
+            else { palit('Paano mo gustong magbayad? 💳'); isaraBibig(); }
+        }
 
-        <label>Last Name *</label>
-        <input type="text" id="lastname" required>
+        // GALAW NG BIBIG
+        const bibig = document.getElementById('bibig');
+        let mabilis = null;
 
-        <label>Contact Number *</label>
-        <input type="tel" id="contact" required placeholder="09XX-XXX-XXXX">
+        function buksanBibig() {
+            bibig.classList.add('bukas');
+        }
+        function isaraBibig() {
+            bibig.classList.remove('bukas', 'nagsasalita');
+            if (mabilis) clearInterval(mabilis);
+        }
+        function bibilisBibig() {
+            bibig.classList.add('nagsasalita');
+            if (mabilis) return;
+            mabilis = setInterval(() => {
+                if (!bibig.classList.contains('nagsasalita')) {
+                    clearInterval(mabilis);
+                    mabilis = null;
+                    return;
+                }
+                bibig.classList.toggle('bukas');
+            }, 150);
+        }
 
-        <label>Birthday *</label>
-        <input type="date" id="birthday" required>
+        document.getElementById('form').addEventListener('submit', async e => {
+            e.preventDefault();
+            const data = {
+                firstname: document.getElementById('firstname').value,
+                middlename: document.getElementById('middlename').value || null,
+                lastname: document.getElementById('lastname').value,
+                phonenumber: document.getElementById('phonenumber').value,
+                address: document.getElementById('address').value,
+                email: document.getElementById('email').value,
+                birthday: document.getElementById('birthday').value,
+                paymentmethod: document.getElementById('payment').value
+            };
+            palit('Salamat! ✅');
+            buksanBibig();
+            const { error } = await db.from('vip_members').insert([data]);
+            if (error) {
+                alert("May mali: " + error.message);
+                palit('Subukan mo ulit 😅');
+                isaraBibig();
+            } else {
+                alert("Registered Successfully! ✅");
+                e.target.reset();
+                setTimeout(() => {
+                    palit('Hello! Mag-register na tayo 😊');
+                    isaraBibig();
+                }, 2500);
+            }
+        });
 
-        <label>Email *</label>
-        <input type="email" id="email" required>
-
-        <label>Full Address *</label>
-        <input type="text" id="address" required>
-
-        <label>Payment Method *</label>
-       <select id="payment_method" required>
-  <option value="">— Select Payment —</option>
-  <option value="Cash">Cash</option>
-  <option value="GCash">GCash</option>
-</select>
-
-<div style="background: #f8ede5; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #2563eb;">
-  <p><strong>📱 GCash Payment Details:</strong></p>
-  <p>Account Name: <strong>jimroi guerta</strong></p>
-  <p>GCash Number: <strong>0926-686-2307</strong></p>
-  <p style="font-size:13px; color:#530101; margin-top:5px;">* Send payment to the number above. Thank you!</p>
-</div>
-<button type ="submit" class="btn">✅ REGISTER NOW</button>
-<div id="status" style="display:none; margin-top:15px;"></div>
-      </form>
-    </div>
-  </div>
-        
-<!-- SUPABASE LIBRARY — WAG GALAWIN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- BUONG SCRIPT — ITO LANG ANG PALITAN -->
-<script>
-const SUPABASE_URL = "https://ctjbpswnrboigfghpbxy.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_OVNbn7f5kP-so9DE-C40tA_pk7_c0mV";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('vipForm');
-  const status = document.getElementById('status');
-
-  if (!form || !status) return;
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    // NAGLILIPAT NG MESSAGE — SIGURADONG LALABAS SA SCREEN
-    status.style.display = 'block';
-    status.style.background = '#fff3cd';
-    status.style.color = '#856404';
-    status.style.padding = '15px';
-    status.style.borderRadius = '8px';
-    status.style.textAlign = 'center';
-    status.style.fontSize = '16px';
-    status.style.marginTop = '15px';
-    status.innerHTML = '⏳ Saving...';
-
-    const data = {
-      firstname: document.getElementById('firstname').value.trim(),
-      middlename: document.getElementById('middlename').value.trim(),
-      lastname: document.getElementById('lastname').value.trim(),
-      contact: document.getElementById('contact').value.trim(),
-      birthday: document.getElementById('birthday').value,
-      email: document.getElementById('email').value.trim() || null,
-      address: document.getElementById('address').value.trim(),
-      payment_method: document.getElementById('payment_method').value
-    };
-
-    try {
-      const { error } = await supabaseClient.from('vip_members').insert([data]);
-      if (error) throw error;
-
-      // ✅ SUCCESS MESSAGE — SIGURADONG LALABAS SA SCREEN!
-      status.style.background = '#d4edda';
-      status.style.color = '#155724';
-      status.innerHTML = '🎉 Registered Successfully! Welcome to CAF8NITY VIP! 🎊';
-      form.reset();
-
-    } catch (err) {
-      status.style.background = '#f8d7da';
-      status.style.color = '#721c24';
-      status.innerHTML = '❌ Error: ' + err.message;
-    }
-  });
-});
-</script>
+        document.addEventListener('mousemove', e => {
+            ['kaliwa', 'kanan'].forEach(id => {
+                const eye = document.getElementById(id);
+                const pupil = eye.querySelector('.pupil');
+                const r = eye.getBoundingClientRect();
+                const cx = r.left + r.width/2, cy = r.top + r.height/2;
+                const ag = Math.atan2(e.clientY - cy, e.clientX - cx);
+                const layo = Math.min(3, Math.hypot(e.clientX - cx, e.clientY - cy)/40);
+                pupil.style.transform = `translate(calc(-50% + ${Math.cos(ag)*layo}px), calc(-50% + ${Math.sin(ag)*layo}px))`;
+            });
+        });
+    </script>
 </body>
 </html>
-<!-- Update: Fixed syntax error -->
